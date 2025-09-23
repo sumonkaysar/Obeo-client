@@ -10,7 +10,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import type { TBasicInfo } from "@/Features/Candidate/types/candidate.type";
+import type {
+  TBasicInfo,
+  TCreateCandidateForm,
+} from "@/Features/Candidate/types/candidate.type";
 import {
   ACCEPTED_MIME_TYPES,
   basicInfoZodSchema,
@@ -21,7 +24,7 @@ import { useForm } from "react-hook-form";
 
 interface IProps {
   allData: TBasicInfo;
-  setAllData: React.Dispatch<React.SetStateAction<TBasicInfo>>;
+  setAllData: React.Dispatch<React.SetStateAction<TCreateCandidateForm>>;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }
 

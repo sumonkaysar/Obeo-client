@@ -1,11 +1,18 @@
 import TabsComponent from "@/components/TabsComponent";
 import BasicInfoForm from "@/Features/Candidate/Components/CreateCandidate/BasicInfoForm";
-import type { TBasicInfo } from "@/Features/Candidate/types/candidate.type";
+import type { TCreateCandidateForm } from "@/Features/Candidate/types/candidate.type";
 import { useState } from "react";
+import EduInfoForm from "../Components/CreateCandidate/EduInfoForm";
+import PastExpForm from "../Components/CreateCandidate/PastExpForm";
 
 const CreateCandidate = () => {
   const [activeTab, setActiveTab] = useState("basic-info");
-  const [allData, setAllData] = useState({} as TBasicInfo);
+  const [allData, setAllData] = useState({} as TCreateCandidateForm);
+
+  const handleCreateCandidate = () => {
+    console.log(activeTab, allData);
+  };
+
   const tabs = [
     {
       label: "Basic Information",
@@ -21,16 +28,27 @@ const CreateCandidate = () => {
     {
       label: "Educational Information",
       value: "edu-info",
-      content: <div>Edu info form</div>,
+      content: (
+        <EduInfoForm
+          allData={allData}
+          setAllData={setAllData}
+          setActiveTab={setActiveTab}
+        />
+      ),
     },
     {
       label: "Past Experience",
       value: "past-exp",
-      content: <div>Past Exp form</div>,
+      content: (
+        <PastExpForm
+          allData={allData}
+          setAllData={setAllData}
+          setActiveTab={setActiveTab}
+          handleCreateCandidate={handleCreateCandidate}
+        />
+      ),
     },
   ];
-
-  console.log(activeTab, allData);
 
   return (
     <div className="bg-[#F4F4F5] p-2">

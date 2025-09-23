@@ -3,6 +3,7 @@ import z from "zod";
 const MAX_FILE_SIZE_MB = 5;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 export const ACCEPTED_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+const today = new Date();
 
 const fileSchema = z
   .instanceof(File)
@@ -80,4 +81,121 @@ export const basicInfoZodSchema = z.object({
     .optional(),
   zipCode: z.string("Zip code must be a string").optional(),
   picture: fileSchema,
+});
+
+export const eduInfoZodSchema = z.object({
+  examName: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Exam name is required"
+          : "Exam name must be a string",
+    })
+    .nonempty("Exam name can't be blank"),
+  institution: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Institution is required"
+          : "Institution must be a string",
+    })
+    .nonempty("Institution can't be blank")
+    .min(2, "Institution must be at least 2 characters long."),
+  roll: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Roll is required"
+          : "Roll must be a string",
+    })
+    .nonempty("Roll can't be blank"),
+  registrationNo: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Registration No is required"
+          : "Registration No must be a string",
+    })
+    .nonempty("Registration No can't be blank"),
+  result: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Result is required"
+          : "Result must be a string",
+    })
+    .nonempty("Result can't be blank"),
+  passingYear: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Passing year is required"
+          : "Passing year must be a string",
+    })
+    .regex(/^\d{4}$/, "Must be a 4-digit year.")
+    .refine(
+      (year) =>
+        parseInt(year, 10) >= 1900 && parseInt(year, 10) <= today.getFullYear(),
+      `Passing year must be between 1900 and ${today.getFullYear()}.`
+    ),
+});
+
+export const pastExpZodSchema = z.object({
+  companyName: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Company name is required"
+          : "Company name must be a string",
+    })
+    .nonempty("Company name can't be blank"),
+  designation: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Designation is required"
+          : "Designation must be a string",
+    })
+    .nonempty("Designation can't be blank")
+    .min(2, "Designation must be at least 2 characters long."),
+  joiningDate: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Joining date is required"
+          : "Joining date must be a string",
+    })
+    .nonempty("Joining date can't be blank")
+    .refine(
+      (dateString) => !isNaN(new Date(dateString).getTime()),
+      "Invalid date format."
+    )
+    .refine(
+      (date) => !date || new Date(date) <= today,
+      "Joining date cannot be in the future."
+    ),
+  expireDate: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Expire date is required"
+          : "Expire date must be a string",
+    })
+    .nonempty("Expire date can't be blank")
+    .refine(
+      (dateString) => !isNaN(new Date(dateString).getTime()),
+      "Invalid date format."
+    ),
+  yearsOfExp: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Years of experience is required"
+          : "Years of experience must be a string",
+    })
+    .regex(/^\d+$/, "Years of experience must be a number.")
+    .refine(
+      (val) => Number(val) >= 0,
+      "Years of experience cannot be negative."
+    ),
 });
