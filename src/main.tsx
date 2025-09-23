@@ -1,4 +1,5 @@
 import App from "@/App.tsx";
+import { Toaster } from "@/components/ui/sonner";
 import "@/index.css";
 import { store } from "@/Redux/store.ts";
 import { StrictMode } from "react";
@@ -9,6 +10,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <App />
+      <Toaster richColors />
     </Provider>
   </StrictMode>
 );
