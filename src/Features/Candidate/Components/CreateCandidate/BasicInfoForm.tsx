@@ -25,7 +25,7 @@ interface IProps {
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const CreateCandidateForm = ({ allData, setAllData, setActiveTab }: IProps) => {
+const BasicInfoForm = ({ allData, setAllData, setActiveTab }: IProps) => {
   const [picture, setPicture] = useState<File | null>(allData?.picture || null);
   const form = useForm<TBasicInfo>({
     resolver: zodResolver(basicInfoZodSchema),
@@ -340,4 +340,4 @@ const CreateCandidateForm = ({ allData, setAllData, setActiveTab }: IProps) => {
   );
 };
 
-export default CreateCandidateForm;
+export default BasicInfoForm;

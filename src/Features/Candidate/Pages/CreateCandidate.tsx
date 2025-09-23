@@ -1,5 +1,5 @@
 import TabsComponent from "@/components/TabsComponent";
-import CreateCandidateForm from "@/Features/Candidate/Components/CreateCandidate/CreateCandidateForm";
+import BasicInfoForm from "@/Features/Candidate/Components/CreateCandidate/BasicInfoForm";
 import type { TBasicInfo } from "@/Features/Candidate/types/candidate.type";
 import { useState } from "react";
 
@@ -11,7 +11,7 @@ const CreateCandidate = () => {
       label: "Basic Information",
       value: "basic-info",
       content: (
-        <CreateCandidateForm
+        <BasicInfoForm
           allData={allData}
           setAllData={setAllData}
           setActiveTab={setActiveTab}
