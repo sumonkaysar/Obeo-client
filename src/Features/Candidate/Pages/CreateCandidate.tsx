@@ -1,14 +1,17 @@
 import TabsComponent from "@/components/TabsComponent";
 import BasicInfoForm from "@/Features/Candidate/Components/CreateCandidate/BasicInfoForm";
-import type { TCreateCandidateForm } from "@/Features/Candidate/types/candidate.type";
+import type {
+  TCandidate,
+  TCreateCandidateForm,
+} from "@/Features/Candidate/types/candidate.type";
 import { useState } from "react";
 import { toast } from "sonner";
 import EduInfoForm from "../Components/CreateCandidate/EduInfoForm";
 import PastExpForm from "../Components/CreateCandidate/PastExpForm";
 
-const CreateCandidate = () => {
+const CreateCandidate = ({ data }: { data?: TCandidate }) => {
   const [activeTab, setActiveTab] = useState("basic-info");
-  const [allData, setAllData] = useState({} as TCreateCandidateForm);
+  const [allData, setAllData] = useState((data || {}) as TCreateCandidateForm);
 
   const handleCreateCandidate = () => {
     toast.success("Candidate created succesfully");

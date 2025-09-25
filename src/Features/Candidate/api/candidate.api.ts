@@ -1,5 +1,6 @@
 import { baseApi } from "@/Redux/baseApi";
 import type { IResponse } from "@/types";
+import type { TCandidate } from "../types/candidate.type";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,13 +10,25 @@ export const authApi = baseApi.injectEndpoints({
       //   z.infer<typeof createCandidateZodSchema>
     >({
       query: (data) => ({
-        url: "/auth/login",
+        url: "/candidates/create",
         method: "POST",
         data,
       }),
       invalidatesTags: ["CANDIDATE"],
     }),
+    getAllCandidates: builder.query<
+      IResponse<TCandidate>,
+      Record<string, string>
+      //   z.infer<typeof createCandidateZodSchema>
+    >({
+      query: () => ({
+        url: "/candidates",
+        method: "POST",
+        // data,
+      }),
+      providesTags: ["CANDIDATE"],
+    }),
   }),
 });
 
-export const { useCreateCandidateMutation } = authApi;
+export const { useCreateCandidateMutation, useGetAllCandidatesQuery } = authApi;
