@@ -13,22 +13,24 @@ import type {
   TCreateCandidateForm,
   TPastExp,
 } from "@/Features/Candidate/types/candidate.type";
+import { pastExpZodSchema } from "@/Features/Candidate/validations/candidate.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { pastExpZodSchema } from "../../validations/candidate.validation";
 
 interface IProps {
+  title?: string;
   allData: TPastExp;
   setAllData: React.Dispatch<React.SetStateAction<TCreateCandidateForm>>;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
-  handleCreateCandidate: () => void;
+  handleCandidateData: () => void;
 }
 
 const PastExpForm = ({
+  title,
   allData,
   setAllData,
   setActiveTab,
-  handleCreateCandidate,
+  handleCandidateData,
 }: IProps) => {
   const form = useForm<TPastExp>({
     resolver: zodResolver(pastExpZodSchema),
@@ -52,7 +54,7 @@ const PastExpForm = ({
         }
       }
       setAllData((prevData) => ({ ...prevData, ...eduInfo }));
-      handleCreateCandidate();
+      handleCandidateData();
     } catch (err) {
       console.error(err);
     }
@@ -61,7 +63,7 @@ const PastExpForm = ({
   return (
     <div className="bg-white shadow-md rounded-xs mx-auto border">
       <h2 className="text-xl font-semibold border-b pt-1 pb-3 px-4">
-        New Candidate
+        {title || "New Candidate"}
       </h2>
       <Form {...form}>
         <form
@@ -171,7 +173,9 @@ const PastExpForm = ({
             >
               Prev
             </Button>
-            <Button className="bg-[#4682B4]">Create</Button>
+            <Button className="bg-[#4682B4]">
+              {title ? "Update" : "Create"}
+            </Button>
           </div>
         </form>
       </Form>

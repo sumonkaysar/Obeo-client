@@ -23,12 +23,18 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface IProps {
+  title?: string;
   allData: TBasicInfo;
   setAllData: React.Dispatch<React.SetStateAction<TCreateCandidateForm>>;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const BasicInfoForm = ({ allData, setAllData, setActiveTab }: IProps) => {
+const BasicInfoForm = ({
+  title,
+  allData,
+  setAllData,
+  setActiveTab,
+}: IProps) => {
   const [picture, setPicture] = useState<File | null>(allData?.picture || null);
   const form = useForm<TBasicInfo>({
     resolver: zodResolver(basicInfoZodSchema),
@@ -44,7 +50,8 @@ const BasicInfoForm = ({ allData, setAllData, setActiveTab }: IProps) => {
       state: allData?.state || "",
       city: allData?.city || "",
       zipCode: allData?.zipCode || "",
-      picture: allData?.picture || undefined,
+      picture:
+        (typeof allData?.picture !== "string" && allData?.picture) || undefined,
     },
   });
 
@@ -68,7 +75,7 @@ const BasicInfoForm = ({ allData, setAllData, setActiveTab }: IProps) => {
   return (
     <div className="bg-white shadow-md rounded-xs mx-auto border">
       <h2 className="text-xl font-semibold border-b pt-1 pb-3 px-4">
-        New Candidate
+        {title || "New Candidate"}
       </h2>
       <Form {...form}>
         <form
@@ -324,11 +331,15 @@ const BasicInfoForm = ({ allData, setAllData, setActiveTab }: IProps) => {
               </FormItem>
             )}
           />
-          {picture instanceof File && (
+          {picture && (
             <div className="mb-2 grid grid-cols-[1fr_3fr] gap-4">
               <div className="text-right">Preview</div>
               <img
-                src={URL.createObjectURL(picture)}
+                src={
+                  picture instanceof File
+                    ? URL.createObjectURL(picture)
+                    : picture
+                }
                 alt="Current profile"
                 className="w-24 h-24 object-cover rounded-md"
               />

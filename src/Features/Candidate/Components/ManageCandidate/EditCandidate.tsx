@@ -9,13 +9,19 @@ import type {
 import { useState } from "react";
 import { toast } from "sonner";
 
-const CreateCandidate = ({ data }: { data?: TCandidate }) => {
+interface IProps {
+  data?: TCandidate;
+  setIsEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const EditCandidate = ({ data, setIsEditModalOpen }: IProps) => {
   const [activeTab, setActiveTab] = useState("basic-info");
   const [allData, setAllData] = useState((data || {}) as TCreateCandidateForm);
 
-  const handleCreateCandidate = () => {
-    toast.success("Candidate created succesfully");
+  const handleUpdateCandidate = () => {
+    toast.success("Candidate updated succesfully");
     console.log(activeTab, allData);
+    setIsEditModalOpen(false);
   };
 
   const tabs = [
@@ -27,6 +33,7 @@ const CreateCandidate = ({ data }: { data?: TCandidate }) => {
           allData={allData}
           setAllData={setAllData}
           setActiveTab={setActiveTab}
+          title="Edit Candidate"
         />
       ),
     },
@@ -38,6 +45,7 @@ const CreateCandidate = ({ data }: { data?: TCandidate }) => {
           allData={allData}
           setAllData={setAllData}
           setActiveTab={setActiveTab}
+          title="Edit Candidate"
         />
       ),
     },
@@ -49,7 +57,8 @@ const CreateCandidate = ({ data }: { data?: TCandidate }) => {
           allData={allData}
           setAllData={setAllData}
           setActiveTab={setActiveTab}
-          handleCandidateData={handleCreateCandidate}
+          handleCandidateData={handleUpdateCandidate}
+          title="Edit Candidate"
         />
       ),
     },
@@ -66,4 +75,4 @@ const CreateCandidate = ({ data }: { data?: TCandidate }) => {
   );
 };
 
-export default CreateCandidate;
+export default EditCandidate;

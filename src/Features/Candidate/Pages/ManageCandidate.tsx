@@ -1,9 +1,12 @@
 import NumberInput from "@/components/NumberInput";
 import SearchInput from "@/components/SearchInput";
+import { Button } from "@/components/ui/button";
 import CandidateTable from "@/Features/Candidate/Components/ManageCandidate/CandidateTable";
+import type {
+  ISort,
+  TCandidate,
+} from "@/Features/Candidate/types/candidate.type";
 import { useState } from "react";
-import { Button } from "../../../components/ui/button";
-import type { ISort, TCandidate } from "../types/candidate.type";
 
 const candidatesData: TCandidate[] = [
   {
@@ -100,7 +103,9 @@ const sortCandidates = (data: TCandidate[], sort: ISort) => {
 };
 
 const ManageCandidate = () => {
+  const [editId, setEditId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [searchingTotal, setSearchingTotal] = useState(0);
   const [entries, setEntries] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState<ISort>({
@@ -110,18 +115,46 @@ const ManageCandidate = () => {
   const [candidates, setCandidates] = useState<TCandidate[]>(
     sortCandidates(candidatesData.slice(0, entries), sort)
   );
-
   const [totalPages, setTotalPages] = useState(
     Math.ceil(candidatesData.length / entries)
   );
 
-  console.log(totalPages, currentPage);
-
   const handleEntriesNo = (entriesNo: number) => {
+    const totalData =
+      searchingTotal > 0 ? searchingTotal : candidatesData.length;
     setEntries(entriesNo);
     setCurrentPage(1);
     setCandidates(sortCandidates(candidatesData.slice(0, entriesNo), sort));
-    setTotalPages(Math.ceil(candidatesData.length / entriesNo));
+    setTotalPages(Math.ceil(totalData / entriesNo));
+  };
+
+  const handleSearching = (searchTerm: string) => {
+    if (searchTerm) {
+      const searchedCandidates = candidatesData.filter(
+        (prevCandidate) =>
+          prevCandidate.firstName.toLowerCase().includes(searchTerm) ||
+          prevCandidate.lastName.toLowerCase().includes(searchTerm) ||
+          prevCandidate.email.toLowerCase().includes(searchTerm) ||
+          prevCandidate.candidateId.toLowerCase().includes(searchTerm) ||
+          prevCandidate?.ssn?.toLowerCase().includes(searchTerm) ||
+          prevCandidate.phone.toLowerCase().includes(searchTerm)
+      );
+
+      setSearchingTotal(searchedCandidates.length);
+      setCandidates(sortCandidates(searchedCandidates.slice(0, entries), sort));
+      setCurrentPage(1);
+      setTotalPages(Math.ceil(searchedCandidates.length / entries));
+    } else {
+      setSearchingTotal(0);
+      setCandidates(sortCandidates(candidatesData.slice(0, entries), sort));
+      setCurrentPage(1);
+      setTotalPages(Math.ceil(candidatesData.length / entries));
+    }
+  };
+
+  const handleSorting = (newSort: ISort) => {
+    setSort(newSort);
+    setCandidates(sortCandidates(candidates, newSort));
   };
 
   const handlePageChanging = (newCurrentPage: number) => {
@@ -133,15 +166,16 @@ const ManageCandidate = () => {
     setCandidates(newCandidates);
   };
 
+  // const handleDelete = () => {
+  //   setCandidates((prevCandidates) =>
+  //     prevCandidates.filter((candidate) => candidate.candidateId !== deleteId)
+  //   );
+  // };
+
   const handleDelete = () => {
     setCandidates((prevCandidates) =>
       prevCandidates.filter((candidate) => candidate.candidateId !== deleteId)
     );
-  };
-
-  const handleSorting = (newSort: ISort) => {
-    setSort(newSort);
-    setCandidates(sortCandidates(candidates, newSort));
   };
 
   return (
@@ -157,7 +191,7 @@ const ManageCandidate = () => {
         </div>
         <div className="flex gap-2 items-center h-full">
           <label htmlFor="Search">Search:</label>
-          <SearchInput />
+          <SearchInput onChange={handleSearching} />
         </div>
       </div>
       <div className="px-4 py-3">
@@ -168,6 +202,8 @@ const ManageCandidate = () => {
           handleSorting={handleSorting}
           setDeleteId={setDeleteId}
           handleDelete={handleDelete}
+          editId={editId}
+          setEditId={setEditId}
         />
       </div>
       <div className="flex justify-end gap-4 px-4 py-3">

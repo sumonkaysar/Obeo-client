@@ -1,6 +1,6 @@
+import type { TCandidate } from "@/Features/Candidate/types/candidate.type";
 import { baseApi } from "@/Redux/baseApi";
 import type { IResponse } from "@/types";
-import type { TCandidate } from "../types/candidate.type";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

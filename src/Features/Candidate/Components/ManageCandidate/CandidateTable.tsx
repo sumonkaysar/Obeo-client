@@ -1,3 +1,4 @@
+import CommonDialog from "@/components/CommonDialog";
 import DeleteDialog from "@/components/DeleteDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -14,15 +15,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import EditCandidate from "@/Features/Candidate/Components/ManageCandidate/EditCandidate";
+import SortingArrows from "@/Features/Candidate/Components/ManageCandidate/SortingArrows";
 import type {
   ISort,
   TCandidate,
 } from "@/Features/Candidate/types/candidate.type";
 import { MoreVertical } from "lucide-react";
 import { useState } from "react";
-import SortingArrows from "./SortingArrows";
-// import CommonDialog from "../../../../components/CommonDialog";
-// import CreateCandidate from "../../Pages/CreateCandidate";
 
 interface IProps {
   candidates: TCandidate[];
@@ -31,6 +31,8 @@ interface IProps {
   handleSorting: (sort: ISort) => void;
   handleDelete: () => void;
   setDeleteId: React.Dispatch<React.SetStateAction<string | null>>;
+  editId: string | null;
+  setEditId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const CandidateTable = ({
@@ -39,9 +41,11 @@ const CandidateTable = ({
   handleSorting,
   handleDelete,
   setDeleteId,
+  editId,
+  setEditId,
 }: IProps) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   return (
     <>
@@ -96,7 +100,7 @@ const CandidateTable = ({
                 {candidate.candidateId}
               </TableCell>
               <TableCell className="text-center">
-                <Avatar>
+                <Avatar className="mx-auto">
                   <AvatarImage src={candidate?.picture} />
                   <AvatarFallback>
                     {candidate.firstName[0]} {candidate.lastName[0]}
@@ -106,32 +110,34 @@ const CandidateTable = ({
               <TableCell className="text-center">{candidate.email}</TableCell>
               <TableCell className="text-center">{candidate.ssn}</TableCell>
               <TableCell className="text-center">{candidate.phone}</TableCell>
-              <TableCell className="items-center justify-center flex">
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <MoreVertical size={18} className="cursor-pointer" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="mr-4">
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => {
-                        // setIsEditModalOpen(true);
-                        setDeleteId(candidate.candidateId);
-                      }}
-                    >
-                      Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="cursor-pointer text-red-500"
-                      onClick={() => {
-                        setIsDeleteModalOpen(true);
-                        setDeleteId(candidate.candidateId);
-                      }}
-                    >
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <TableCell className="text-center">
+                <div className="flex justify-center items-center">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <MoreVertical size={18} className="cursor-pointer" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="mr-4">
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setIsEditModalOpen(true);
+                          setEditId(candidate.candidateId);
+                        }}
+                      >
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="cursor-pointer text-red-500"
+                        onClick={() => {
+                          setIsDeleteModalOpen(true);
+                          setDeleteId(candidate.candidateId);
+                        }}
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </TableCell>
             </TableRow>
           ))}
@@ -142,16 +148,21 @@ const CandidateTable = ({
         setIsOpen={setIsDeleteModalOpen}
         onCofirm={handleDelete}
       />
-      {/* <CommonDialog
+      <CommonDialog
         isOpen={isEditModalOpen}
         setIsOpen={setIsEditModalOpen}
-        title="Edit Candidate"
+        className="max-h-[calc(100vh_-_50px)] w-[calc(100vw_-_50px)] max-w-none sm:max-w-none overflow-y-scroll p-0"
         content={
-          <div className="max-h-screen overflow-y-scroll">
-            <CreateCandidate />
+          <div className="max-h-full">
+            <EditCandidate
+              data={candidates.find(
+                (candidate) => candidate.candidateId === editId
+              )}
+              setIsEditModalOpen={setIsEditModalOpen}
+            />
           </div>
         }
-      /> */}
+      />
     </>
   );
 };

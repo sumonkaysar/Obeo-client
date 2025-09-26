@@ -18,12 +18,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 interface IProps {
+  title?: string;
   allData: TEduInfo;
   setAllData: React.Dispatch<React.SetStateAction<TCreateCandidateForm>>;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const EduInfoForm = ({ allData, setAllData, setActiveTab }: IProps) => {
+const EduInfoForm = ({ title, allData, setAllData, setActiveTab }: IProps) => {
   const form = useForm<TEduInfo>({
     resolver: zodResolver(eduInfoZodSchema),
     defaultValues: {
@@ -56,7 +57,7 @@ const EduInfoForm = ({ allData, setAllData, setActiveTab }: IProps) => {
   return (
     <div className="bg-white shadow-md rounded-xs mx-auto border">
       <h2 className="text-xl font-semibold border-b pt-1 pb-3 px-4">
-        New Candidate
+        {title || "New Candidate"}
       </h2>
       <Form {...form}>
         <form

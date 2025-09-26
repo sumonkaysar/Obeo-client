@@ -1,9 +1,14 @@
-const SearchInput = () => {
+const SearchInput = ({
+  onChange,
+}: {
+  onChange: (searchTerm: string) => void;
+}) => {
   return (
     <div className="relative h-full">
       <input
         type="text"
         id="Search"
+        onChange={(e) => onChange(e.target.value.toLowerCase())}
         className="w-full h-9 rounded-xs border px-3 py-2 "
       />
       <span className="absolute inset-y-0 right-2 grid w-8 place-content-center">

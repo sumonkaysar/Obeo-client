@@ -1,7 +1,7 @@
 import App from "@/App";
+import CreateCandidate from "@/Features/Candidate/Pages/CreateCandidate";
+import ManageCandidate from "@/Features/Candidate/Pages/ManageCandidate";
 import { createBrowserRouter } from "react-router";
-import CreateCandidate from "../Features/Candidate/Pages/CreateCandidate";
-import ManageCandidate from "../Features/Candidate/Pages/ManageCandidate";
 
 const router = createBrowserRouter([
   {

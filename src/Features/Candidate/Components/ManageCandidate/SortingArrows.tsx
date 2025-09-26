@@ -1,5 +1,5 @@
+import type { ISort } from "@/Features/Candidate/types/candidate.type";
 import { MoveDown, MoveUp } from "lucide-react";
-import type { ISort } from "../../types/candidate.type";
 
 interface IProps {
   sort: ISort;

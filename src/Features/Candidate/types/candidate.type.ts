@@ -1,9 +1,9 @@
-import type z from "zod";
 import {
   basicInfoZodSchema,
   eduInfoZodSchema,
   pastExpZodSchema,
-} from "../validations/candidate.validation";
+} from "@/Features/Candidate/validations/candidate.validation";
+import type z from "zod";
 
 export type TBasicInfo = z.infer<typeof basicInfoZodSchema>;
 export type TEduInfo = z.infer<typeof eduInfoZodSchema>;

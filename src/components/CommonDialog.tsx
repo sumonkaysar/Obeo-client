@@ -8,18 +8,25 @@ import {
 import type { ReactNode } from "react";
 
 interface IProps {
-  title: string;
+  title?: string;
   content: ReactNode;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  className: string;
 }
 
-const CommonDialog = ({ title, content, isOpen, setIsOpen }: IProps) => {
+const CommonDialog = ({
+  title,
+  content,
+  isOpen,
+  setIsOpen,
+  className,
+}: IProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-h-screen w-full">
+      <DialogContent className={className}>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle className={title ? "" : "sr-only"}>{title}</DialogTitle>
           <DialogDescription className="sr-only"></DialogDescription>
           {content}
         </DialogHeader>
