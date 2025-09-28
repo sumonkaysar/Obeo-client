@@ -8,10 +8,6 @@ interface IProps {
 }
 
 const SortingArrows = ({ sort, sortBy, handleSorting }: IProps) => {
-  // const onClick = () => {
-
-  // }
-
   return (
     <div
       onClick={() => {

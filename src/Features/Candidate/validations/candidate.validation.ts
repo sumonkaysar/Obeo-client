@@ -199,3 +199,43 @@ export const pastExpZodSchema = z.object({
       "Years of experience cannot be negative."
     ),
 });
+
+export const shortlistCandidateZodSchema = z.object({
+  candidate: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Candidate ID is required"
+          : "Candidate ID must be a string",
+    })
+    .nonempty("Candidate ID can't be blank"),
+  // .regex(
+  //   /^[0-9a-fA-F]{24}$/,
+  //   "Candidate ID must be a valid MongoDB ObjectId"
+  // ),
+  jobPosition: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Job Position is required"
+          : "Job Position must be a string",
+    })
+    .nonempty("Job Position can't be blank")
+    .min(2, "Job Position must be at least 2 characters long."),
+  interviewDate: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Interview date is required"
+          : "Interview date must be a string",
+    })
+    .nonempty("Interview date can't be blank")
+    .refine(
+      (dateString) => !isNaN(new Date(dateString).getTime()),
+      "Invalid date format."
+    )
+    .refine(
+      (date) => !date || new Date(date) >= today,
+      "Joining date cannot be in the past."
+    ),
+});

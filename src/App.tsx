@@ -22,6 +22,14 @@ function App() {
               Manage Candidate
             </Link>
           </li>
+          <li>
+            <Link
+              className="text-blue-600 hover:underline"
+              to="/candidate-shortlist"
+            >
+              Candidate Shortlist
+            </Link>
+          </li>
         </ul>
       </div>
     </div>

@@ -1,15 +1,49 @@
+import CommonDialog from "@/components/CommonDialog";
 import NumberInput from "@/components/NumberInput";
 import SearchInput from "@/components/SearchInput";
 import { Button } from "@/components/ui/button";
-import CandidateTable from "@/Features/Candidate/Components/ManageCandidate/CandidateTable";
-import { candidatesData } from "@/Features/Candidate/consts/candidate.const";
+import AddShortlistForm from "@/Features/Candidate/Components/CandidateShortlist/AddShortlistForm";
+import ShortlistTable from "@/Features/Candidate/Components/CandidateShortlist/ShortlistTable";
 import type {
   ISort,
-  TCandidate,
+  TShortlistCandidate,
+  TShortlistCandidateForm,
 } from "@/Features/Candidate/types/candidate.type";
+import { PlusCircle } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
-const sortCandidates = (data: TCandidate[], sort: ISort) => {
+const candidatesData: TShortlistCandidate[] = [
+  {
+    _id: "akjgdhsxbva",
+    candidateId: "candidate-001",
+    firstName: "John",
+    lastName: "Doe",
+    jobPosition: "Junior Frontend Developer",
+    interviewDate: "2025-09-01T11:00:00.000Z",
+    createdAt: "2025-09-28T16:04:37.642Z",
+  },
+  {
+    _id: "akjhdhsxbva",
+    candidateId: "candidate-002",
+    firstName: "Alice",
+    lastName: "Smith",
+    jobPosition: "Senior Backend Developer",
+    interviewDate: "2025-09-30T11:00:00.000Z",
+    createdAt: "2025-09-28T16:04:37.642Z",
+  },
+  {
+    _id: "akjgdhsxzva",
+    candidateId: "candidate-003",
+    firstName: "Michael",
+    lastName: "Brown",
+    jobPosition: "Full Stack Web Developer",
+    interviewDate: "2025-09-01T13:00:00.000Z",
+    createdAt: "2025-09-28T16:04:37.642Z",
+  },
+];
+
+const sortCandidates = (data: TShortlistCandidate[], sort: ISort) => {
   const sortedCandidates = [...data].sort((a, b) => {
     const key = sort.sortBy;
     const candidate1 = a[key as keyof typeof a] as string;
@@ -21,9 +55,10 @@ const sortCandidates = (data: TCandidate[], sort: ISort) => {
   return sortedCandidates;
 };
 
-const ManageCandidate = () => {
+const CandidateShortlist = () => {
   const [editId, setEditId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [searchingTotal, setSearchingTotal] = useState(0);
   const [entries, setEntries] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,12 +66,18 @@ const ManageCandidate = () => {
     sortBy: "firstName",
     order: "desc",
   });
-  const [candidates, setCandidates] = useState<TCandidate[]>(
+  const [candidates, setCandidates] = useState<TShortlistCandidate[]>(
     sortCandidates(candidatesData.slice(0, entries), sort)
   );
   const [totalPages, setTotalPages] = useState(
     Math.ceil(candidatesData.length / entries)
   );
+
+  const handleAddShortlist = (data: TShortlistCandidateForm) => {
+    toast.success("Candidate added to the shortlist successfully");
+    console.log(data);
+    setIsAddModalOpen(false);
+  };
 
   const handleEntriesNo = (entriesNo: number) => {
     const totalData =
@@ -53,10 +94,8 @@ const ManageCandidate = () => {
         (prevCandidate) =>
           prevCandidate.firstName.toLowerCase().includes(searchTerm) ||
           prevCandidate.lastName.toLowerCase().includes(searchTerm) ||
-          prevCandidate.email.toLowerCase().includes(searchTerm) ||
           prevCandidate.candidateId.toLowerCase().includes(searchTerm) ||
-          prevCandidate?.ssn?.toLowerCase().includes(searchTerm) ||
-          prevCandidate.phone.toLowerCase().includes(searchTerm)
+          prevCandidate?.jobPosition?.toLowerCase().includes(searchTerm)
       );
 
       setSearchingTotal(searchedCandidates.length);
@@ -93,9 +132,31 @@ const ManageCandidate = () => {
 
   return (
     <div className="bg-white shadow-md rounded-xs mx-auto border">
-      <h2 className="text-xl font-semibold border-b pt-1 pb-3 px-4">
-        Manage Candidate
-      </h2>
+      <div className="flex justify-between border-b pt-1 pb-3 px-4">
+        <h2 className="text-xl font-semibold">Manage Candidate</h2>
+        <div className="flex gap-3">
+          <Button
+            onClick={() => setIsAddModalOpen(true)}
+            className="bg-[#007BFF] hover:bg-[#0B76E9] flex items-center gap-1 rounded-xs cursor-pointer"
+          >
+            <PlusCircle />
+            Add Shortlist
+          </Button>
+          <CommonDialog
+            isOpen={isAddModalOpen}
+            setIsOpen={setIsAddModalOpen}
+            className="max-h-[calc(100vh_-_50px)] w-[calc(100vw_-_50px)] max-w-none sm:max-w-none overflow-y-scroll p-0"
+            content={
+              <div className="max-h-full">
+                <AddShortlistForm handleAddShortlist={handleAddShortlist} />
+              </div>
+            }
+          />
+          <Button className="bg-[#007BFF] hover:bg-[#0B76E9] rounded-xs cursor-pointer">
+            Manage Shortlist
+          </Button>
+        </div>
+      </div>
       <div className="flex justify-between px-4 py-3">
         <div className="flex gap-2 items-center">
           <label htmlFor="entries">Show</label>
@@ -108,8 +169,8 @@ const ManageCandidate = () => {
         </div>
       </div>
       <div className="px-4 py-3">
-        <CandidateTable
-          candidates={candidates as TCandidate[]}
+        <ShortlistTable
+          candidates={candidates}
           sort={sort}
           setSort={setSort}
           handleSorting={handleSorting}
@@ -143,4 +204,4 @@ const ManageCandidate = () => {
   );
 };
 
-export default ManageCandidate;
+export default CandidateShortlist;

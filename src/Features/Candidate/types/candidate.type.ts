@@ -2,6 +2,7 @@ import {
   basicInfoZodSchema,
   eduInfoZodSchema,
   pastExpZodSchema,
+  shortlistCandidateZodSchema,
 } from "@/Features/Candidate/validations/candidate.validation";
 import type z from "zod";
 
@@ -16,6 +17,16 @@ export type TCandidate = Omit<TCreateCandidateForm, "picture"> & {
   candidateId: string;
   picture: string;
 };
+
+export type TShortlistCandidateForm = z.infer<
+  typeof shortlistCandidateZodSchema
+>;
+
+export type TShortlistCandidate = {
+  _id: string;
+  createdAt: string;
+} & Pick<TCandidate, "firstName" | "lastName" | "candidateId"> &
+  Omit<TShortlistCandidateForm, "candidate">;
 
 export interface ISort {
   sortBy: string;
