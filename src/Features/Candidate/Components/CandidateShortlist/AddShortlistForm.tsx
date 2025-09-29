@@ -20,26 +20,30 @@ import { candidatesData } from "@/Features/Candidate/consts/candidate.const";
 import type { TShortlistCandidateForm } from "@/Features/Candidate/types/candidate.type";
 import { shortlistCandidateZodSchema } from "@/Features/Candidate/validations/candidate.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import dayjs from "dayjs";
 import { useForm } from "react-hook-form";
 
 interface IProps {
   title?: string;
-  handleAddShortlist: (data: TShortlistCandidateForm) => void;
+  onSubmit: (data: TShortlistCandidateForm) => void;
+  data?: TShortlistCandidateForm;
 }
 
-const AddShortlistForm = ({ title, handleAddShortlist }: IProps) => {
+const AddShortlistForm = ({ title, onSubmit, data }: IProps) => {
   const form = useForm<TShortlistCandidateForm>({
     resolver: zodResolver(shortlistCandidateZodSchema),
     defaultValues: {
-      candidate: "",
-      jobPosition: "",
-      interviewDate: "",
+      candidate: data?.candidate || "",
+      jobPosition: data?.jobPosition || "",
+      interviewDate: data?.interviewDate
+        ? dayjs(data.interviewDate).format("YYYY-MM-DDTHH:mm")
+        : "",
     },
   });
 
   const handleSubmit = async (data: TShortlistCandidateForm) => {
     try {
-      handleAddShortlist(data);
+      onSubmit(data);
     } catch (err) {
       console.error(err);
     }

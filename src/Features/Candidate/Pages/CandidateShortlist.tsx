@@ -4,6 +4,7 @@ import SearchInput from "@/components/SearchInput";
 import { Button } from "@/components/ui/button";
 import AddShortlistForm from "@/Features/Candidate/Components/CandidateShortlist/AddShortlistForm";
 import ShortlistTable from "@/Features/Candidate/Components/CandidateShortlist/ShortlistTable";
+import { shortlistCandidates } from "@/Features/Candidate/consts/candidate.const";
 import type {
   ISort,
   TShortlistCandidate,
@@ -12,36 +13,6 @@ import type {
 import { PlusCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-
-const candidatesData: TShortlistCandidate[] = [
-  {
-    _id: "akjgdhsxbva",
-    candidateId: "candidate-001",
-    firstName: "John",
-    lastName: "Doe",
-    jobPosition: "Junior Frontend Developer",
-    interviewDate: "2025-09-01T11:00:00.000Z",
-    createdAt: "2025-09-28T16:04:37.642Z",
-  },
-  {
-    _id: "akjhdhsxbva",
-    candidateId: "candidate-002",
-    firstName: "Alice",
-    lastName: "Smith",
-    jobPosition: "Senior Backend Developer",
-    interviewDate: "2025-09-30T11:00:00.000Z",
-    createdAt: "2025-09-28T16:04:37.642Z",
-  },
-  {
-    _id: "akjgdhsxzva",
-    candidateId: "candidate-003",
-    firstName: "Michael",
-    lastName: "Brown",
-    jobPosition: "Full Stack Web Developer",
-    interviewDate: "2025-09-01T13:00:00.000Z",
-    createdAt: "2025-09-28T16:04:37.642Z",
-  },
-];
 
 const sortCandidates = (data: TShortlistCandidate[], sort: ISort) => {
   const sortedCandidates = [...data].sort((a, b) => {
@@ -67,30 +38,26 @@ const CandidateShortlist = () => {
     order: "desc",
   });
   const [candidates, setCandidates] = useState<TShortlistCandidate[]>(
-    sortCandidates(candidatesData.slice(0, entries), sort)
+    sortCandidates(shortlistCandidates.slice(0, entries), sort)
   );
   const [totalPages, setTotalPages] = useState(
-    Math.ceil(candidatesData.length / entries)
+    Math.ceil(shortlistCandidates.length / entries)
   );
-
-  const handleAddShortlist = (data: TShortlistCandidateForm) => {
-    toast.success("Candidate added to the shortlist successfully");
-    console.log(data);
-    setIsAddModalOpen(false);
-  };
 
   const handleEntriesNo = (entriesNo: number) => {
     const totalData =
-      searchingTotal > 0 ? searchingTotal : candidatesData.length;
+      searchingTotal > 0 ? searchingTotal : shortlistCandidates.length;
     setEntries(entriesNo);
     setCurrentPage(1);
-    setCandidates(sortCandidates(candidatesData.slice(0, entriesNo), sort));
+    setCandidates(
+      sortCandidates(shortlistCandidates.slice(0, entriesNo), sort)
+    );
     setTotalPages(Math.ceil(totalData / entriesNo));
   };
 
   const handleSearching = (searchTerm: string) => {
     if (searchTerm) {
-      const searchedCandidates = candidatesData.filter(
+      const searchedCandidates = shortlistCandidates.filter(
         (prevCandidate) =>
           prevCandidate.firstName.toLowerCase().includes(searchTerm) ||
           prevCandidate.lastName.toLowerCase().includes(searchTerm) ||
@@ -104,9 +71,11 @@ const CandidateShortlist = () => {
       setTotalPages(Math.ceil(searchedCandidates.length / entries));
     } else {
       setSearchingTotal(0);
-      setCandidates(sortCandidates(candidatesData.slice(0, entries), sort));
+      setCandidates(
+        sortCandidates(shortlistCandidates.slice(0, entries), sort)
+      );
       setCurrentPage(1);
-      setTotalPages(Math.ceil(candidatesData.length / entries));
+      setTotalPages(Math.ceil(shortlistCandidates.length / entries));
     }
   };
 
@@ -117,11 +86,17 @@ const CandidateShortlist = () => {
 
   const handlePageChanging = (newCurrentPage: number) => {
     setCurrentPage(newCurrentPage);
-    const newCandidates = candidatesData.slice(
+    const newCandidates = shortlistCandidates.slice(
       (newCurrentPage - 1) * entries,
       newCurrentPage * entries
     );
     setCandidates(newCandidates);
+  };
+
+  const handleAddShortlist = (data: TShortlistCandidateForm) => {
+    toast.success("Candidate added to the shortlist successfully");
+    console.log(data);
+    setIsAddModalOpen(false);
   };
 
   const handleDelete = () => {
@@ -148,7 +123,7 @@ const CandidateShortlist = () => {
             className="max-h-[calc(100vh_-_50px)] w-[calc(100vw_-_50px)] max-w-none sm:max-w-none overflow-y-scroll p-0"
             content={
               <div className="max-h-full">
-                <AddShortlistForm handleAddShortlist={handleAddShortlist} />
+                <AddShortlistForm onSubmit={handleAddShortlist} />
               </div>
             }
           />

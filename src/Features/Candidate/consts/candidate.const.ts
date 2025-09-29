@@ -1,4 +1,7 @@
-import type { TCandidate } from "@/Features/Candidate/types/candidate.type";
+import type {
+  TCandidate,
+  TShortlistCandidate,
+} from "@/Features/Candidate/types/candidate.type";
 
 export const candidatesData: TCandidate[] = [
   {
@@ -79,5 +82,38 @@ export const candidatesData: TCandidate[] = [
     joiningDate: "2020-11-01",
     expireDate: "2025-10-31",
     yearsOfExp: "5",
+  },
+];
+
+export const shortlistCandidates: TShortlistCandidate[] = [
+  {
+    _id: "akjgdhsxbvaahha",
+    candidate: "akjgdhsxbva",
+    candidateId: "candidate-001",
+    firstName: "John",
+    lastName: "Doe",
+    jobPosition: "Junior Frontend Developer",
+    interviewDate: "2025-10-12T11:00:00.000Z",
+    createdAt: "2025-09-28T16:04:37.642Z",
+  },
+  {
+    _id: "akjhdhsxbvartsvs",
+    candidate: "akjhdhsxbva",
+    candidateId: "candidate-002",
+    firstName: "Alice",
+    lastName: "Smith",
+    jobPosition: "Senior Backend Developer",
+    interviewDate: "2025-10-11T11:00:00.000Z",
+    createdAt: "2025-09-28T16:04:37.642Z",
+  },
+  {
+    _id: "akjgdhsxzvaawqd",
+    candidate: "akjgdhsxzva",
+    candidateId: "candidate-003",
+    firstName: "Michael",
+    lastName: "Brown",
+    jobPosition: "Full Stack Web Developer",
+    interviewDate: "2025-10-12T13:00:00.000Z",
+    createdAt: "2025-09-28T16:04:37.642Z",
   },
 ];

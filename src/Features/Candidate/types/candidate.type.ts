@@ -26,7 +26,7 @@ export type TShortlistCandidate = {
   _id: string;
   createdAt: string;
 } & Pick<TCandidate, "firstName" | "lastName" | "candidateId"> &
-  Omit<TShortlistCandidateForm, "candidate">;
+  TShortlistCandidateForm;
 
 export interface ISort {
   sortBy: string;
